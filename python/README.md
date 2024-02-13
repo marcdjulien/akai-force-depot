@@ -2,19 +2,34 @@
 Instructions for running python on the Akai Force. This assumes you have the Mockba [MockbaMod](https://github.com/MockbaTheBorg/MockbaMod) already installed and running.
 
 # Prerequisites
-*Ubuntu 20.04* 
+* Ubuntu 20.04
+  
 These instructions assume a fresh install of Ubuntu 20.04. I'd reccomend burning an image onto a USB drive and running from that. You won't need a permanent install.
 
+* sources.list
+  
+Make sure your `/etc/apt/sources.list` file looks exactly like this:
+  ```
+  deb http://security.ubuntu.com/ubuntu focal-security main universe
+  deb http://archive.ubuntu.com/ubuntu bionic main universe
+  deb http://archive.ubuntu.com/ubuntu bionic-security main universe
+  deb http://archive.ubuntu.com/ubuntu bionic-updates main universe
+
+  deb cdrom:[Ubuntu 20.04.6 LTS _Focal Fossa_ - Release amd64 (20230316)]/ focal main restricted
+  deb http://archive.ubuntu.com/ubuntu/ focal main restricted
+  deb http://security.ubuntu.com/ubuntu/ focal-security main restricted
+  deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted
+  ```
 # Building Python
 Reference: [https://github.com/karthickai/python-arm-xcompile/tree/master](https://github.com/karthickai/python-arm-xcompile/blob/master/python_xcompile.sh)
 1. Install the toolchains
    ```
-   sudo apt-get install gcc-arm-linux-gnueabihf
-   sudo apt-get install g++-arm-linux-gnueabihf
+   sudo apt install gcc-arm-linux-gnueabihf
+   sudo apt install g++-arm-linux-gnueabihf
    ```
 2. Install make
    ```
-   sudo apt-get install make
+   sudo apt install make
    ```
 3. Download the python_xcompile.sh script referenced above and modify the PYTHON_VERSION variable in the script to 3.8.10
    ```
@@ -24,7 +39,19 @@ Reference: [https://github.com/karthickai/python-arm-xcompile/tree/master](https
    ```
    bash python_xcompile.sh
    ```
-Once this completes everything should be in `python_xcompile/_install`. You can tar the `_install` folder and SCP it onto the Force. The python3 binary is in `_install/bin/python3`
+5. The python install should be in `python_xcompile/_install`. Package it up and SCP it onto the Force.
+  ```
+  cd python_xcompile
+  tar -czf python3.tar.gz _install
+  scp python3.tar.gz root@192.168.0.50:/media/662522
+  ```
+6. Untar and run!
+   ```
+   # ON THE FORCE
+   cd /media/662522
+   tar -xzf python3.tar.gz --no-same-owner
+   _install/bin/python3
+   ```
 
 # Cross compile alsa and jack libraries
 In order to get the mido library to work, we first need to cross compile alsa and jack.
@@ -62,6 +89,7 @@ References:
 4. On the Force, we need to copy these into the /usr/lib directory
    ```
    # ON THE AKAI FORCE
+   cd /media/662522
    tar -xzf libjack.tar.gz --no-same-owner
    cp libjack/* /usr/lib
    ```
@@ -70,4 +98,36 @@ References:
    ```
    sudo apt install python3-pip
    ```
-2. 
+2. Install crossvenv
+   ```
+   pip3 install crossenv
+   ```
+3. Create the venv (This steps assumes you built Python in the previous step in `/home/ubuntu/Downloads`
+   ```
+   python3 -m crossenv /home/ubuntu/Downloads/python_xcompile/_install/bin/python3.7 venv
+   ```
+4. Source the new venv
+   ```
+   source venv/bin/activate
+   ```
+5. Install mido and python-rtmdidi (only version 1.4 worked)
+   ```
+   pip install mido
+   pip install python-rtmidi==1.4
+   ```
+6. Install any other python packages that you want
+7. Package up the crossenv and scp onto the Force
+   ```
+   tar -czf crossvenv.tar.gz venv/cross/lib/python3.8/site-packages
+   scp crossvenv.tar.gz root@192.168.0.50:/media/662522
+   ```
+8. Replace the site-packages directory in the python install on the Force
+   ```
+   # ON THE FORCE
+   cd /media/662522
+   tar -xzf crossvenv.tar.gz --no-same-owner
+   rm -rf _install/lib/python3.8/site-packages
+   cp crossvenv/venv/cross/lib/python3.8/site-packages _install/lib/python3.8
+   ```
+
+At this point you should be able to run the python3 binary and import mido!
