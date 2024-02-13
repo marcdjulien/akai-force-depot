@@ -1,6 +1,26 @@
 # Python on the Akai Force
 Instructions for running python on the Akai Force. This assumes you have the [MockbaMod](https://github.com/MockbaTheBorg/MockbaMod) already installed and running.
 
+## Precompiled Version
+If you only need python and the mido library, you can just do the following:
+1. Download and SCP the released zip onto the FORCE
+```
+scp akai-force-python3.8.10.tar.gz root@192.168.0.50/media/662511
+```
+2. Extract and copy jack library:
+```
+# ON THE FORCE
+cd /media/662522
+tar -xzf akai-force-python3.8.10.tar.gz --no-same-owner
+cp libjack/* /usr/lib/
+```
+3. Run python!
+```
+_install/bin/python3
+```
+
+If you need additional python packages you'll need to build python and cross compile the packages (similar to what was done for mido and ptyhon-rtmidi below).
+
 # Prerequisites
 * Ubuntu 20.04
   
