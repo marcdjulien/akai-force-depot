@@ -5,7 +5,7 @@ Instructions for running python on the Akai Force. This assumes you have the [Mo
 If you only need python and the mido library, you can just do the following:
 1. Download and SCP the released zip onto the FORCE
 ```
-scp akai-force-python3.8.10.tar.gz root@[FORCE-IP]/media/662522
+scp akai-force-python3.8.10.tar.gz root@[FORCE-IP]:/media/662522
 ```
 2. Extract and copy jack library:
 ```
