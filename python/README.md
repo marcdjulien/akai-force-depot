@@ -60,11 +60,11 @@ Reference: [https://github.com/karthickai/python-arm-xcompile/tree/master](https
    bash python_xcompile.sh
    ```
 5. The python install should be in `python_xcompile/_install`. Package it up and SCP it onto the Force.
-  ```
-  cd python_xcompile
-  tar -czf python3.tar.gz _install
-  scp python3.tar.gz root@[FORCE-IP]:/media/662522
-  ```
+   ```
+   cd python_xcompile
+   tar -czf python3.tar.gz _install
+   scp python3.tar.gz root@[FORCE-IP]:/media/662522
+   ```
 6. Untar and run!
    ```
    # ON THE FORCE
