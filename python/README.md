@@ -5,7 +5,7 @@ Instructions for running python on the Akai Force. This assumes you have the [Mo
 If you only need python and the mido library, you can just do the following:
 1. Download and SCP the released zip onto the FORCE
 ```
-scp akai-force-python3.8.10.tar.gz root@192.168.0.50/media/662522
+scp akai-force-python3.8.10.tar.gz root@[FORCE-IP]/media/662522
 ```
 2. Extract and copy jack library:
 ```
@@ -63,7 +63,7 @@ Reference: [https://github.com/karthickai/python-arm-xcompile/tree/master](https
   ```
   cd python_xcompile
   tar -czf python3.tar.gz _install
-  scp python3.tar.gz root@192.168.0.50:/media/662522
+  scp python3.tar.gz root@[FORCE-IP]:/media/662522
   ```
 6. Untar and run!
    ```
@@ -104,7 +104,7 @@ References:
    ```
    cp /usr/arm-linux-gnueabihf/lib/libjack* libjack/
    tar -czf libjack.tar.gz libjack/"
-   scp libjack.tar.gz root@192.168.0.50:/media/662522
+   scp libjack.tar.gz root@[FORCE-IP]:/media/662522
    ```
 4. On the Force, we need to copy these into the /usr/lib directory
    ```
@@ -139,7 +139,7 @@ References:
 7. Package up the crossenv and scp onto the Force
    ```
    tar -czf crossvenv.tar.gz venv/cross/lib/python3.8/site-packages
-   scp crossvenv.tar.gz root@192.168.0.50:/media/662522
+   scp crossvenv.tar.gz root@[FORCE-IP]:/media/662522
    ```
 8. Replace the site-packages directory in the python install on the Force
    ```
