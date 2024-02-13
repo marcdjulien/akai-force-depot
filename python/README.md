@@ -1,5 +1,5 @@
 # Python on the Akai Force
-Instructions for running python on the Akai Force. This assumes you have the Mockba [MockbaMod](https://github.com/MockbaTheBorg/MockbaMod) already installed and running.
+Instructions for running python on the Akai Force. This assumes you have the [MockbaMod](https://github.com/MockbaTheBorg/MockbaMod) already installed and running.
 
 # Prerequisites
 * Ubuntu 20.04
